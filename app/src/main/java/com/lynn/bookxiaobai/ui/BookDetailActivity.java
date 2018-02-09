@@ -3,6 +3,8 @@ package com.lynn.bookxiaobai.ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,7 +16,7 @@ import com.lynn.bookxiaobai.presenter.BookPresenter;
 import com.lynn.bookxiaobai.view.BookView;
 
 
-public class BookDetailActivity extends Activity {
+public class BookDetailActivity extends AppCompatActivity {
     private TextView txtBookName;
     private TextView txtAuthor;
     private ImageView imgBook;
@@ -28,6 +30,12 @@ public class BookDetailActivity extends Activity {
 
         Intent intent = getIntent();
         BookBean bookBean = intent.getParcelableExtra("BookBean");
+
+        Toolbar toolbar =findViewById(R.id.toolbar);
+       setTitle("图书详情");
+       setSupportActionBar(toolbar);
+       if(getSupportActionBar()!=null)
+           getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
         txtBookName = (TextView) findViewById(R.id.txt_book_name);

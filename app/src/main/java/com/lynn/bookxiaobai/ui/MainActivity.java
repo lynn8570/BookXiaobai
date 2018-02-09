@@ -42,15 +42,6 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-//        TextView test = (TextView) findViewById(R.id.test);
-//        test.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                new IntentIntegrator(MainActivity.this).initiateScan();
-//            }
-//
-//        });
         ButterKnife.bind(MainActivity.this);
 
         imageViewScan.setOnClickListener(new View.OnClickListener() {
