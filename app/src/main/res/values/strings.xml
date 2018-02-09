@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">BookXiaobai</string>
+    <string name="unread">未读</string>
+    <string name="unstart">未知</string>
+    <string name="read">已读</string>
+
+</resources>

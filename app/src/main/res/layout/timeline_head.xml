@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/anime_root"
+    android:layout_width="match_parent"
+    android:layout_height="180dp"
+    app:layout_collapseMode="parallax"
+    app:layout_collapseParallaxMultiplier="0.7"
+    tools:context="com.lynn.bookxiaobai.ui.MainActivity"
+    tools:showIn="@layout/activity_main">
+
+    <!-- 可伸缩背景图布局文件 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="16dp"
+        >
+
+        <EditText
+            android:id="@+id/edit_search"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:hint="作者或书名"
+            android:layout_weight="1"
+            android:background="@drawable/bg_edit" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:text="搜索"
+            android:background="@drawable/bg_button"
+            />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/img_user"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="17dp"
+        android:layout_marginStart="24dp"
+        android:src="@drawable/mgpic" />
+
+    <ImageView
+        android:id="@+id/img_scan"
+        android:layout_width="76dp"
+        android:layout_height="46dp"
+
+        android:layout_alignBottom="@+id/img_user"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="25dp"
+        android:src="@drawable/img_barcode" />
+
+
+</RelativeLayout>
