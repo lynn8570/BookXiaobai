@@ -13,16 +13,28 @@
 
     <TextView
         android:id="@+id/txt_book_name"
-        android:layout_width="200dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:maxWidth="170dp"
         android:layout_marginStart="10dp"
         android:text="小王子"
+        android:maxLines="2"
         android:singleLine="true"
         android:textColor="@color/colorTextGrey"
         android:textSize="28dp"
        android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="40dp"
+        />
+
+    <ImageView android:src="@drawable/ic_unstar"
+        android:id="@+id/img_star"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:padding="2dp"
+        android:layout_toRightOf="@id/txt_book_name"
+        android:layout_alignBottom="@id/txt_book_name"
+
         />
 
     <TextView

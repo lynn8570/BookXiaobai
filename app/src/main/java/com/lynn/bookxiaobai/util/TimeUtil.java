@@ -1,6 +1,9 @@
 
 package com.lynn.bookxiaobai.util;
 
+import android.provider.ContactsContract;
+import android.text.TextUtils;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -12,9 +15,14 @@ import java.util.Locale;
 
 public class TimeUtil {
 
-    public static String parseDateTime(String dateString, String originalFormat, String outputFromat) {
+    //, , "hh:mm a, dd-MMM-yyyy")
+    public static final String TIME_FORMAT="yyyy-MM-dd HH:mm";
 
-        SimpleDateFormat formatter = new SimpleDateFormat(originalFormat, Locale.US);
+    public static String parseDateTimeSpan(String dateString) {
+        if(TextUtils.isEmpty(dateString))
+            return "";
+
+        SimpleDateFormat formatter = new SimpleDateFormat(TIME_FORMAT, Locale.US);
         Date date = null;
         try {
             date = formatter.parse(dateString);
@@ -29,6 +37,16 @@ public class TimeUtil {
             e.printStackTrace();
             return "";
         }
+    }
+
+    public static String getTime(Date date){
+        if(date==null){
+            date= new Date();//current time
+        }
+        SimpleDateFormat formatter = new SimpleDateFormat(TIME_FORMAT, Locale.US);
+
+        return formatter.format(date);
+
     }
 
     /**

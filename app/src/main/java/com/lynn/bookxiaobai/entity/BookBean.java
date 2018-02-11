@@ -2,20 +2,15 @@ package com.lynn.bookxiaobai.entity;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 /**
  * Created by Administrator on 2018/2/7.
  */
 
 public class BookBean implements Parcelable {
-
 
 
     private RatingBean rating;
@@ -42,15 +37,15 @@ public class BookBean implements Parcelable {
     private List<TagsBean> tags;
     private List<String> translator;
 
-    private UserNote userNote;//linlian added for user note
-
-    public UserNote getUserNote() {
-        return userNote;
-    }
-
-    public void setUserNote(UserNote userNote) {
-        this.userNote = userNote;
-    }
+//    private UserNote userNote;//linlian added for user note
+//
+//    public UserNote getUserNote() {
+//        return userNote;
+//    }
+//
+//    public void setUserNote(UserNote userNote) {
+//        this.userNote = userNote;
+//    }
 
     public RatingBean getRating() {
         return rating;
@@ -236,83 +231,83 @@ public class BookBean implements Parcelable {
         this.translator = translator;
     }
 
-    public static class UserNote implements Parcelable {
-        public static final int STATE_UNSTART=0;
-        public static final int STATE_UNREADED=1;
-        public static final int STATE_READED=2;
-
-        private int state;
-        private long stateTime;
-        private String note;
-        private String noteTime;
-
-        public long getStateTime() {
-            return stateTime;
-        }
-
-        public void setStateTime(long stateTime) {
-            this.stateTime = stateTime;
-        }
-
-        public String getNote() {
-            return note;
-        }
-
-        public void setNote(String note) {
-            this.note = note;
-        }
-
-        public String getNoteTime() {
-            return noteTime;
-        }
-
-        public void setNoteTime(String noteTime) {
-            this.noteTime = noteTime;
-        }
-
-        public int getState() {
-            return state;
-        }
-
-        public void setState(int state) {
-            this.state = state;
-        }
-
-        @Override
-        public int describeContents() {
-            return 0;
-        }
-
-        @Override
-        public void writeToParcel(Parcel dest, int flags) {
-            dest.writeInt(this.state);
-            dest.writeLong(this.stateTime);
-            dest.writeString(this.note);
-            dest.writeString(this.noteTime);
-        }
-
-        public UserNote() {
-        }
-
-        protected UserNote(Parcel in) {
-            this.state = in.readInt();
-            this.stateTime = in.readLong();
-            this.note = in.readString();
-            this.noteTime = in.readString();
-        }
-
-        public static final Creator<UserNote> CREATOR = new Creator<UserNote>() {
-            @Override
-            public UserNote createFromParcel(Parcel source) {
-                return new UserNote(source);
-            }
-
-            @Override
-            public UserNote[] newArray(int size) {
-                return new UserNote[size];
-            }
-        };
-    }
+//    public static class UserNote implements Parcelable {
+//        public static final int STATE_UNSTART=0;
+//        public static final int STATE_UNREADED=1;
+//        public static final int STATE_READED=2;
+//
+//        private int state;
+//        private long stateTime;
+//        private String note;
+//        private String noteTime;
+//
+//        public long getStateTime() {
+//            return stateTime;
+//        }
+//
+//        public void setStateTime(long stateTime) {
+//            this.stateTime = stateTime;
+//        }
+//
+//        public String getNote() {
+//            return note;
+//        }
+//
+//        public void setNote(String note) {
+//            this.note = note;
+//        }
+//
+//        public String getNoteTime() {
+//            return noteTime;
+//        }
+//
+//        public void setNoteTime(String noteTime) {
+//            this.noteTime = noteTime;
+//        }
+//
+//        public int getState() {
+//            return state;
+//        }
+//
+//        public void setState(int state) {
+//            this.state = state;
+//        }
+//
+//        @Override
+//        public int describeContents() {
+//            return 0;
+//        }
+//
+//        @Override
+//        public void writeToParcel(Parcel dest, int flags) {
+//            dest.writeInt(this.state);
+//            dest.writeLong(this.stateTime);
+//            dest.writeString(this.note);
+//            dest.writeString(this.noteTime);
+//        }
+//
+//        public UserNote() {
+//        }
+//
+//        protected UserNote(Parcel in) {
+//            this.state = in.readInt();
+//            this.stateTime = in.readLong();
+//            this.note = in.readString();
+//            this.noteTime = in.readString();
+//        }
+//
+//        public static final Creator<UserNote> CREATOR = new Creator<UserNote>() {
+//            @Override
+//            public UserNote createFromParcel(Parcel source) {
+//                return new UserNote(source);
+//            }
+//
+//            @Override
+//            public UserNote[] newArray(int size) {
+//                return new UserNote[size];
+//            }
+//        };
+//    }
 
     public static class RatingBean implements Parcelable {
         /**
@@ -567,16 +562,17 @@ public class BookBean implements Parcelable {
     public BookBean() {
     }
 
-    //for data test
-    public BookBean(String title, String author, int state, String summary,String time) {
-        this.setTitle(title);
-        ArrayList<String> authors = new ArrayList<String>();
-        authors.add(author);
-        this.setAuthor(authors);
-        UserNote userNote = new UserNote();
-        userNote.setState(state);
-        userNote.setNoteTime(time);
-        this.setUserNote(userNote);
+    public BookBeanMini extraBookBeanMini() {
+        BookBeanMini bookBeanMini = new BookBeanMini();
+        bookBeanMini.setId(this.id);
+        bookBeanMini.setTitile(this.title);
+        bookBeanMini.setAuthor(this.getAuthor().get(0));
+        bookBeanMini.setSummary(this.summary);
+        bookBeanMini.setAuthor_intro(this.author_intro);
+        bookBeanMini.setIsbn10(this.isbn10);
+        bookBeanMini.setIsbn13(this.isbn13);
+        bookBeanMini.setPrice(this.price);
+        return bookBeanMini;
     }
 
     protected BookBean(Parcel in) {

@@ -1,8 +1,11 @@
 package com.lynn.bookxiaobai.ui;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -10,68 +13,98 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.lynn.bookxiaobai.App;
 import com.lynn.bookxiaobai.R;
+import com.lynn.bookxiaobai.boxstore.BookBeanMiniBox;
+import com.lynn.bookxiaobai.boxstore.BoxConfig;
 import com.lynn.bookxiaobai.entity.BookBean;
+import com.lynn.bookxiaobai.entity.BookBeanMini;
 import com.lynn.bookxiaobai.presenter.BookPresenter;
 import com.lynn.bookxiaobai.view.BookView;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 
 public class BookDetailActivity extends AppCompatActivity {
-    private TextView txtBookName;
-    private TextView txtAuthor;
-    private ImageView imgBook;
-    private View view;
-    private TextView textView;
+    @BindView(R.id.txt_book_name)
+    TextView txtBookName;
+    @BindView(R.id.txt_author)
+    TextView txtAuthor;
+    @BindView(R.id.img_book)
+    ImageView imgBook;
+    @BindView(R.id.txt_summery)
+    TextView textView;
+    @BindView(R.id.img_star)
+    ImageView imgStar;
+
+    private BookBeanMiniBox mBookBeanMiniBox;
+
+    private BookBean mBookbean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_detail);
 
+        ButterKnife.bind(BookDetailActivity.this);
+
         Intent intent = getIntent();
-        BookBean bookBean = intent.getParcelableExtra("BookBean");
+        mBookbean = intent.getParcelableExtra("BookBean");
 
-        Toolbar toolbar =findViewById(R.id.toolbar);
-       setTitle("图书详情");
-       setSupportActionBar(toolbar);
-       if(getSupportActionBar()!=null)
-           getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-
-        txtBookName = (TextView) findViewById(R.id.txt_book_name);
-        txtAuthor = (TextView) findViewById(R.id.txt_author);
-        imgBook = (ImageView) findViewById(R.id.img_book);
-        view = (View) findViewById(R.id.view);
-        textView = (TextView) findViewById(R.id.textView);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setTitle("图书详情");
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        displayBookDetail(bookBean);
-        testLoadBool();  //for test only
+
+        mBookBeanMiniBox = new BookBeanMiniBox(BookBeanMini.class);
+        displayBookDetail(mBookbean);
+
+        imgStar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mBookBeanMini == null) {
+                    addBookBeanMini();
+                } else {
+                    removeBookBeanMini();
+                }
+            }
+        });
 
     }
 
-    private void testLoadBool() {
 
-        BookPresenter mBookPresenter = new BookPresenter(this);
-        mBookPresenter.onCreate();
-        mBookPresenter.attachView(new BookView() {
-            @Override
-            public void onSuccess(BookBean bookBean) {
-                displayBookDetail(bookBean);
-            }
+    private BookBeanMini mBookBeanMini;
 
-            @Override
-            public void onError(String msg) {
+    private void updateStar() {
 
-            }
+        mBookBeanMini = mBookBeanMiniBox.query(mBookbean.getId());
+        if (mBookBeanMini != null) {
+            imgStar.setImageDrawable(ContextCompat.getDrawable(BookDetailActivity.this, R.drawable.ic_star));
 
-            @Override
-            public void onChange(BookBean bookBean) {
+        } else {
+            imgStar.setImageDrawable(ContextCompat.getDrawable(BookDetailActivity.this, R.drawable.ic_unstar));
+        }
+    }
 
-            }
-        });
-        mBookPresenter.getBookByIsbn("9787115412744");
-        Toast.makeText(BookDetailActivity.this, "start request..", Toast.LENGTH_LONG).show();
+    private void addBookBeanMini() {
+        long result = mBookBeanMiniBox.insert(mBookbean);
+        if (result < 0) {
+            Toast.makeText(BookDetailActivity.this, "add start error", Toast.LENGTH_LONG).show();
+            mBookBeanMini = null;
+        } else {
+            updateStar();
+        }
+
+    }
+
+    private void removeBookBeanMini() {
+
+        mBookBeanMiniBox.delete(mBookBeanMini);
+        updateStar();
     }
 
     private void displayBookDetail(BookBean bookBean) {
@@ -80,5 +113,6 @@ public class BookDetailActivity extends AppCompatActivity {
             txtAuthor.setText(bookBean.getAuthor().get(0));
             textView.setText(bookBean.getSummary());
         }
+        updateStar();
     }
 }
