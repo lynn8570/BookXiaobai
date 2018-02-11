@@ -1,9 +1,6 @@
 package com.lynn.bookxiaobai.ui;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -13,14 +10,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.lynn.bookxiaobai.App;
 import com.lynn.bookxiaobai.R;
 import com.lynn.bookxiaobai.boxstore.BookBeanMiniBox;
-import com.lynn.bookxiaobai.boxstore.BoxConfig;
 import com.lynn.bookxiaobai.entity.BookBean;
 import com.lynn.bookxiaobai.entity.BookBeanMini;
-import com.lynn.bookxiaobai.presenter.BookPresenter;
-import com.lynn.bookxiaobai.view.BookView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

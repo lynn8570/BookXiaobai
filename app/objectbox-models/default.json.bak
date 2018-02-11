@@ -1,0 +1,78 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "1:2622854388548889952",
+      "lastPropertyId": "13:2475045779658094570",
+      "name": "BookBeanPer",
+      "properties": [
+        {
+          "id": "1:2747422890322101290",
+          "name": "idbox"
+        },
+        {
+          "id": "2:4974266741743796256",
+          "name": "id"
+        },
+        {
+          "id": "3:1330371400880404694",
+          "name": "titile"
+        },
+        {
+          "id": "4:7305443274518803572",
+          "name": "author"
+        },
+        {
+          "id": "5:8913607924566962981",
+          "name": "isbn10"
+        },
+        {
+          "id": "6:9074699163367024518",
+          "name": "isbn13"
+        },
+        {
+          "id": "7:5518519854425116908",
+          "name": "author_intro"
+        },
+        {
+          "id": "8:5204902490559994140",
+          "name": "summary"
+        },
+        {
+          "id": "9:7232657703544163006",
+          "name": "price"
+        },
+        {
+          "id": "10:2166132214328810188",
+          "name": "state"
+        },
+        {
+          "id": "11:3027624291310923210",
+          "name": "stateTime"
+        },
+        {
+          "id": "12:2186161144653766732",
+          "name": "note"
+        },
+        {
+          "id": "13:2475045779658094570",
+          "name": "noteTime"
+        }
+      ],
+      "relations": []
+    }
+  ],
+  "lastEntityId": "1:2622854388548889952",
+  "lastIndexId": "0:0",
+  "lastRelationId": "0:0",
+  "lastSequenceId": "0:0",
+  "modelVersion": 4,
+  "modelVersionParserMinimum": 4,
+  "retiredEntityUids": [],
+  "retiredIndexUids": [],
+  "retiredPropertyUids": [],
+  "retiredRelationUids": [],
+  "version": 1
+}

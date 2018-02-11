@@ -2,21 +2,22 @@ package com.lynn.bookxiaobai.ui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-import com.lynn.bookxiaobai.App;
 import com.lynn.bookxiaobai.R;
 import com.lynn.bookxiaobai.boxstore.BookBeanMiniBox;
-import com.lynn.bookxiaobai.boxstore.BoxConfig;
 import com.lynn.bookxiaobai.entity.BookBean;
 import com.lynn.bookxiaobai.entity.BookBeanMini;
 import com.lynn.bookxiaobai.presenter.BookPresenter;
@@ -41,6 +42,12 @@ public class MainActivity extends Activity {
     @BindView(R.id.img_scan)
     ImageView imageViewScan;
 
+    @BindView(R.id.btn_search)
+    Button buttonSearch;
+
+    @BindView(R.id.edit_search)
+    EditText editTextSearch;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,12 +64,27 @@ public class MainActivity extends Activity {
         });
 
 
+        buttonSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String strSearch = String.valueOf(editTextSearch.getText());
+                if (!TextUtils.isEmpty(strSearch)) {
+//                   mBookPresenter.getSearchBooks(strSearch,"",0,10);
+                    Intent intent = new Intent(MainActivity.this, SearchListActivity.class);
+                    intent.putExtra("key", strSearch);
+                    startActivity(intent);
+                }
+            }
+        });
+
+
         mBookPresenter.onCreate();
         mBookPresenter.attachView(mBookView);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mRecyclerView.setHasFixedSize(true);
+
 
         initTimeline();
     }
@@ -73,14 +95,15 @@ public class MainActivity extends Activity {
         super.onDestroy();
     }
 
-    private DataSubscriptionList dataSubscriptionList=new DataSubscriptionList();
+    private DataSubscriptionList dataSubscriptionList = new DataSubscriptionList();
+
     private void initTimeline() {
 
 //        loadData();
         mTimeLineAdapter = new TimeLineAdapter(mDataList);
         mRecyclerView.setAdapter(mTimeLineAdapter);
         mBeanMiniBox = new BookBeanMiniBox(BookBeanMini.class);
-        mBeanMiniBox.bindBoxListAdapter(mTimeLineAdapter,dataSubscriptionList);
+        mBeanMiniBox.bindBoxListAdapter(mTimeLineAdapter, dataSubscriptionList);
 
     }
 
@@ -121,7 +144,7 @@ public class MainActivity extends Activity {
         }
     }
 
-    private BookView mBookView = new BookView() {
+    private BookView<BookBean> mBookView = new BookView<BookBean>() {
         @Override
         public void onSuccess(BookBean book) {
             //startdetail activity
@@ -137,8 +160,12 @@ public class MainActivity extends Activity {
         }
 
         @Override
-        public void onChange(BookBean bookBean) {
+        public void onCompleted() {
 
         }
+
+
     };
+
+
 }

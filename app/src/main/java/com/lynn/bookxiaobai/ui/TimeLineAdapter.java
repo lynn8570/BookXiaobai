@@ -44,6 +44,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineViewHolder> im
         mLayoutInflater = LayoutInflater.from(mContext);
         View view;
         view = mLayoutInflater.inflate(R.layout.item_timeline, parent, false);
+
         return new TimeLineViewHolder(view, viewType);
     }
 

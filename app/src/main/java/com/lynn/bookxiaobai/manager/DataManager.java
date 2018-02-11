@@ -22,8 +22,8 @@ public class DataManager {
         this.mRetrofitService = RetrofitHelper.getInstance(context).getService();
     }
 
-    public Observable<BooksResult> getSearchBooks(String name, String tag, int start, int count){
-        return mRetrofitService.getSearchBook(name,tag,start,count);
+    public Observable<BooksResult> getSearchBooks(String key, String tag, int start, int count){
+        return mRetrofitService.getSearchBook(key,tag,start,count);
     }
     public Observable<BookBean> getBookByIsbn(String strIsbn){
         return  mRetrofitService.getBookByIsbn(strIsbn);

@@ -1,17 +1,8 @@
 package com.lynn.bookxiaobai;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
-import android.util.Log;
-import android.widget.Toast;
-
-import com.lynn.bookxiaobai.entity.BookBean;
-import com.lynn.bookxiaobai.presenter.BookPresenter;
-import com.lynn.bookxiaobai.ui.BookDetailActivity;
-import com.lynn.bookxiaobai.ui.MainActivity;
-import com.lynn.bookxiaobai.view.BookView;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

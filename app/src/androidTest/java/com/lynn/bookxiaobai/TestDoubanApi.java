@@ -1,14 +1,12 @@
 package com.lynn.bookxiaobai;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
 
 import com.lynn.bookxiaobai.entity.BookBean;
 import com.lynn.bookxiaobai.presenter.BookPresenter;
-import com.lynn.bookxiaobai.ui.BookDetailActivity;
 import com.lynn.bookxiaobai.view.BookView;
 
 import org.junit.Before;
@@ -24,7 +22,7 @@ import static org.junit.Assert.assertNotNull;
 @RunWith(AndroidJUnit4.class)
 public class TestDoubanApi {
 
-    private BookView mtestBookView = new BookView() {
+    private BookView<BookBean> mtestBookView = new BookView<BookBean>() {
         @Override
         public void onSuccess(BookBean book) {
             assertNotNull(book);
@@ -45,9 +43,11 @@ public class TestDoubanApi {
         }
 
         @Override
-        public void onChange(BookBean bookBean) {
-            assertNotNull(bookBean);
+        public void onCompleted() {
+
         }
+
+
     };
     private final String  testIsbn="9787115412744";
     private BookPresenter bookPresenter;
@@ -73,4 +73,6 @@ public class TestDoubanApi {
 
         bookPresenter.getBookByIsbn(testId);
     }
+
+
 }
