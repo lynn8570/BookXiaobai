@@ -24,10 +24,10 @@ public abstract class RecycleItemAdapter<T> extends RecyclerView.Adapter<TimeLin
     protected LayoutInflater mLayoutInflater;
     protected ItemClickListener itemClickListener;
 
-    public RecycleItemAdapter(List<T> feedlist) {
-        this.mFeedlist = feedlist;
-    }
 
+    public RecycleItemAdapter(List<T> feadlist){
+        mFeedlist = feadlist;
+    }
     public List<T> getmFeedlist() {
         return mFeedlist;
     }
@@ -36,6 +36,7 @@ public abstract class RecycleItemAdapter<T> extends RecyclerView.Adapter<TimeLin
         itemClickListener = listener;
     }
 
+
     @Override
     public void onBindViewHolder(TimeLineViewHolder holder, final int position) {
         if (itemClickListener != null) {
@@ -43,6 +44,13 @@ public abstract class RecycleItemAdapter<T> extends RecyclerView.Adapter<TimeLin
                 @Override
                 public void onClick(View view) {
                     itemClickListener.onItemClick(view, position);
+                }
+            });
+
+            holder.mState.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    itemClickListener.onStateClick(view,position);
                 }
             });
         }

@@ -20,6 +20,7 @@ import com.lynn.bookxiaobai.boxstore.BookBeanMiniBox;
 import com.lynn.bookxiaobai.entity.BookBean;
 import com.lynn.bookxiaobai.entity.BookBeanMini;
 import com.lynn.bookxiaobai.presenter.BookPresenter;
+import com.lynn.bookxiaobai.util.TimeUtil;
 import com.lynn.bookxiaobai.view.BookView;
 
 import java.util.ArrayList;
@@ -107,12 +108,24 @@ public class MainActivity extends Activity {
         mTimeLineAdapter.setItemClick(new ItemClickListener() {
             @Override
             public void onItemClick(View view, int positon) {
-                Log.i("linlian","positon="+positon);
+                Log.i("linlian", "view=" + view);
+                Log.i("linlian", "positon=" + positon);
                 BookBeanMini bm = mTimeLineAdapter.getmFeedlist().get(positon);
-                Log.i("linlian","bm="+bm);
-                Intent intent = new Intent(MainActivity.this,BookDetailActivity.class);
-                intent.putExtra("id",bm.getId());
+                Log.i("linlian", "bm=" + bm);
+                Intent intent = new Intent(MainActivity.this, BookDetailActivity.class);
+                intent.putExtra("id", bm.getId());
                 startActivity(intent);
+            }
+
+            @Override
+            public void onStateClick(View view, int position) {
+                Log.i("linlian", "onStateClick positon=" + position);
+                BookBeanMini bm = mTimeLineAdapter.getmFeedlist().get(position);
+                bm.setState(bm.getState() == BookBeanMini.STATE_UNREADED?BookBeanMini.STATE_READED:BookBeanMini.STATE_UNREADED);
+                bm.setStateTime(TimeUtil.getTime(null));
+                Log.i("linlian", "onStateClick bm=" + bm);
+                mBeanMiniBox.update(bm);
+
             }
         });
 

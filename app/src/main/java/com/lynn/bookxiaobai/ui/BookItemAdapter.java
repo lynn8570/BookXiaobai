@@ -25,30 +25,21 @@ import java.util.List;
 public class BookItemAdapter extends RecycleItemAdapter<BookBean> {
 
 
-
-
     public BookItemAdapter(List<BookBean> feedlist) {
         super(feedlist);
         this.mFeedlist = feedlist;
     }
 
 
-
-
     @Override
     public void onBindViewHolder(TimeLineViewHolder holder, final int position) {
-
-        super.onBindViewHolder(holder,position);
+        super.onBindViewHolder(holder, position);
         BookBean bookBean = mFeedlist.get(position);
-
-
         holder.mTitle.setText(bookBean.getTitle());
-        holder.mAuthor.setText(bookBean.getAuthor().get(0));
-
+        List<String> authors = bookBean.getAuthor();
+        holder.mAuthor.setText(authors == null ||authors.size()==0? "null":authors.get(0));
         holder.mTime.setText("");
-
-
-
+        holder.mState.setText("");
     }
 
 }

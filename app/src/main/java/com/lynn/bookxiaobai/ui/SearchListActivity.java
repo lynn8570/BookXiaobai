@@ -89,6 +89,11 @@ public class SearchListActivity extends Activity {
                 intent.putExtra("BookBean", bookBean);
                 startActivity(intent);
             }
+
+            @Override
+            public void onStateClick(View view,int position) {
+
+            }
         });
 
 

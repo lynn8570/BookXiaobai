@@ -3,6 +3,7 @@ package com.lynn.bookxiaobai.util;
 
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -16,10 +17,15 @@ import java.util.Locale;
 public class TimeUtil {
 
     //, , "hh:mm a, dd-MMM-yyyy")
-    public static final String TIME_FORMAT="yyyy-MM-dd HH:mm";
+    public static final String TIME_FORMAT = "yyyy-MM-dd HH:mm";
 
     public static String parseDateTimeSpan(String dateString) {
-        if(TextUtils.isEmpty(dateString))
+        return parseDateTimeSpan(dateString, null);
+    }
+
+    public static String parseDateTimeSpan(String dateString, String basetime) {
+        Log.i("linlian", "parseDateTimeSpan=" + dateString);
+        if (TextUtils.isEmpty(dateString))
             return "";
 
         SimpleDateFormat formatter = new SimpleDateFormat(TIME_FORMAT, Locale.US);
@@ -31,7 +37,22 @@ public class TimeUtil {
 //
 //            return dateFormat.format(date);
             ;
-            return millis2FitTimeSpan(System.currentTimeMillis() - date.getTime(), 2);
+            long spanmillis;
+            if (TextUtils.isEmpty(basetime)) {
+
+                spanmillis = System.currentTimeMillis() - date.getTime();
+            } else {
+                spanmillis = formatter.parse(basetime).getTime() - date.getTime();
+            }
+            Log.i("linlian", "spanmillis=" + spanmillis);
+            if (spanmillis < 60000) {
+                return millis2FitTimeSpan(spanmillis, 4);
+            } else if (spanmillis >= 60000 && spanmillis < 3600000) {
+                return millis2FitTimeSpan(spanmillis, 3);
+            } else// if(spanmillis>=3600000){
+                return millis2FitTimeSpan(spanmillis, 2);
+            //}
+
 
         } catch (ParseException e) {
             e.printStackTrace();
@@ -39,9 +60,9 @@ public class TimeUtil {
         }
     }
 
-    public static String getTime(Date date){
-        if(date==null){
-            date= new Date();//current time
+    public static String getTime(Date date) {
+        if (date == null) {
+            date = new Date();//current time
         }
         SimpleDateFormat formatter = new SimpleDateFormat(TIME_FORMAT, Locale.US);
 

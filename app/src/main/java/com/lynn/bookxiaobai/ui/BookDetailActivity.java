@@ -152,7 +152,8 @@ public class BookDetailActivity extends AppCompatActivity {
         mBookbean=bookBean;
         if (bookBean != null) {
             txtBookName.setText(bookBean.getTitle());
-            txtAuthor.setText(bookBean.getAuthor().get(0));
+
+            txtAuthor.setText(bookBean.getAuthor().size()==0?"null":bookBean.getAuthor().get(0));
             textView.setText(bookBean.getSummary());
         }
         updateStar();

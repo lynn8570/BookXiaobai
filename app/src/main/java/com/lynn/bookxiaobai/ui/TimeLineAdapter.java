@@ -50,9 +50,11 @@ public class TimeLineAdapter extends RecycleItemAdapter<BookBeanMini> {
         holder.mTitle.setText(bookBeanMini.getTitile());
         holder.mAuthor.setText(bookBeanMini.getAuthor());
 
-        holder.mTime.setText(TimeUtil.parseDateTimeSpan(bookBeanMini.getNoteTime()));
+        holder.mTime.setText(TimeUtil.parseDateTimeSpan(bookBeanMini.getStateTime()));
 
 
     }
+
+
 
 }
