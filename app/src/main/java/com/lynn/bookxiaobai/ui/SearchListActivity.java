@@ -1,12 +1,13 @@
 package com.lynn.bookxiaobai.ui;
 
 import android.app.Activity;
-import android.content.ServiceConnection;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 
 import com.lynn.bookxiaobai.R;
 import com.lynn.bookxiaobai.entity.BookBean;
@@ -46,7 +47,11 @@ public class SearchListActivity extends Activity {
 
                 Log.i("linlian", "data=" + data);
 
-                bookItemAdapter.updateList(data.getBooks());
+                if (data != null && data.getBooks() != null) {
+                    mFeedList = data.getBooks();
+                    bookItemAdapter.updateList(mFeedList);
+                }
+
             }
 
             @Override
@@ -73,6 +78,18 @@ public class SearchListActivity extends Activity {
 
         bookItemAdapter = new BookItemAdapter(mFeedList);
         recyclerView.setAdapter(bookItemAdapter);
+
+        bookItemAdapter.setItemClick(new ItemClickListener() {
+            @Override
+            public void onItemClick(View view, int positon) {
+                Log.i("linlian", "position=" + positon);
+                BookBean bookBean = mFeedList.get(positon);
+                Log.i("linlian", "bookBean=" + bookBean);
+                Intent intent = new Intent(SearchListActivity.this, BookDetailActivity.class);
+                intent.putExtra("BookBean", bookBean);
+                startActivity(intent);
+            }
+        });
 
 
     }

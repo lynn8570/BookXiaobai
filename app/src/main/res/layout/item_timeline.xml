@@ -18,6 +18,7 @@
         />
     <!-- timeline 和 bookbean 显示的内容左右分布-->
     <RelativeLayout
+        android:id="@+id/rl_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView

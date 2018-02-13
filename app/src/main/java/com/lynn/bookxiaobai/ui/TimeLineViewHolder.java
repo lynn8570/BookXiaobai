@@ -3,6 +3,7 @@ package com.lynn.bookxiaobai.ui;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.github.vipulasri.timelineview.TimelineView;
@@ -29,6 +30,9 @@ public class TimeLineViewHolder extends RecyclerView.ViewHolder {
 
     @BindView(R.id.time_marker)
     TimelineView mTimelineView;
+
+    @BindView(R.id.rl_item)
+    RelativeLayout relativeLayout;
 
     public TimeLineViewHolder(View itemView,int viewType) {
         super(itemView);

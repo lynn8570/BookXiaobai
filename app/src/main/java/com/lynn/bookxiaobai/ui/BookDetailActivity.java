@@ -2,9 +2,11 @@ package com.lynn.bookxiaobai.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.TestLooperManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,6 +16,8 @@ import com.lynn.bookxiaobai.R;
 import com.lynn.bookxiaobai.boxstore.BookBeanMiniBox;
 import com.lynn.bookxiaobai.entity.BookBean;
 import com.lynn.bookxiaobai.entity.BookBeanMini;
+import com.lynn.bookxiaobai.presenter.BookPresenter;
+import com.lynn.bookxiaobai.view.BookView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,15 +39,14 @@ public class BookDetailActivity extends AppCompatActivity {
 
     private BookBean mBookbean;
 
+    private BookPresenter bookPresenter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_detail);
 
         ButterKnife.bind(BookDetailActivity.this);
-
-        Intent intent = getIntent();
-        mBookbean = intent.getParcelableExtra("BookBean");
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setTitle("图书详情");
@@ -52,9 +55,49 @@ public class BookDetailActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-
         mBookBeanMiniBox = new BookBeanMiniBox(BookBeanMini.class);
-        displayBookDetail(mBookbean);
+
+        bookPresenter = new BookPresenter(BookDetailActivity.this);
+        bookPresenter.onCreate();
+
+        bookPresenter.attachView(new BookView<BookBean>() {
+            @Override
+            public void onSuccess(BookBean data) {
+                if (data != null) {
+                    displayBookDetail(data);
+                }
+
+            }
+
+            @Override
+            public void onError(String msg) {
+
+            }
+
+            @Override
+            public void onCompleted() {
+
+            }
+        });
+
+        Intent intent = getIntent();
+        mBookbean = intent.getParcelableExtra("BookBean");
+        if (mBookbean == null) {
+            String strId = intent.getStringExtra("id");
+            if (TextUtils.isEmpty(strId)) {
+                Toast.makeText(BookDetailActivity.this, "get id failed", Toast.LENGTH_SHORT).show();
+            } else {
+                requestBook(strId);
+            }
+
+        } else {
+            displayBookDetail(mBookbean);
+        }
+
+
+
+
+
 
         imgStar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,6 +112,11 @@ public class BookDetailActivity extends AppCompatActivity {
 
     }
 
+    private void requestBook(String strid) {
+
+        Toast.makeText(BookDetailActivity.this, "request book", Toast.LENGTH_SHORT).show();
+        bookPresenter.getBookById(strid);
+    }
 
     private BookBeanMini mBookBeanMini;
 
@@ -101,6 +149,7 @@ public class BookDetailActivity extends AppCompatActivity {
     }
 
     private void displayBookDetail(BookBean bookBean) {
+        mBookbean=bookBean;
         if (bookBean != null) {
             txtBookName.setText(bookBean.getTitle());
             txtAuthor.setText(bookBean.getAuthor().get(0));

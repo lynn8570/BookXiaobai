@@ -461,7 +461,7 @@ public class BookBean implements Parcelable {
         };
     }
 
-    public static class TagsBean {
+    public static class TagsBean implements  Parcelable{
         /**
          * count : 2942
          * name : С����
@@ -471,6 +471,24 @@ public class BookBean implements Parcelable {
         private int count;
         private String name;
         private String title;
+
+        protected TagsBean(Parcel in) {
+            count = in.readInt();
+            name = in.readString();
+            title = in.readString();
+        }
+
+        public static final Creator<TagsBean> CREATOR = new Creator<TagsBean>() {
+            @Override
+            public TagsBean createFromParcel(Parcel in) {
+                return new TagsBean(in);
+            }
+
+            @Override
+            public TagsBean[] newArray(int size) {
+                return new TagsBean[size];
+            }
+        };
 
         public int getCount() {
             return count;
@@ -494,6 +512,19 @@ public class BookBean implements Parcelable {
 
         public void setTitle(String title) {
             this.title = title;
+        }
+
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel parcel, int i) {
+            parcel.writeInt(count);
+            parcel.writeString(name);
+            parcel.writeString(title);
         }
     }
 

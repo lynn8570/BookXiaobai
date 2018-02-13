@@ -16,7 +16,6 @@ import rx.schedulers.Schedulers;
 public class BookPresenter extends Presenter.PresenterBase<BookBean> {
 
 
-
     private TimeLineAdapter mTimeLineAdapter;
     private BookBean mBooBean;
 
@@ -25,7 +24,6 @@ public class BookPresenter extends Presenter.PresenterBase<BookBean> {
         super(context);
         this.mContext = context;
     }
-
 
 
     public void getBookByIsbn(String strIsbn) {
@@ -54,7 +52,6 @@ public class BookPresenter extends Presenter.PresenterBase<BookBean> {
     }
 
 
-
     public void getBookById(String strId) {
         mCompositeSubscription.add(manager.getBookById(strId)
                 .subscribeOn(Schedulers.io())
@@ -72,8 +69,9 @@ public class BookPresenter extends Presenter.PresenterBase<BookBean> {
 
                     @Override
                     public void onNext(BookBean bookBean) {
-                        mView.onSuccess(bookBean);
+
                         mBooBean = bookBean;
+                        mView.onSuccess(bookBean);
                     }
                 }));
     }

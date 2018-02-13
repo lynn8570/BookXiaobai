@@ -2,7 +2,6 @@ package com.lynn.bookxiaobai.ui;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -104,6 +103,19 @@ public class MainActivity extends Activity {
         mRecyclerView.setAdapter(mTimeLineAdapter);
         mBeanMiniBox = new BookBeanMiniBox(BookBeanMini.class);
         mBeanMiniBox.bindBoxListAdapter(mTimeLineAdapter, dataSubscriptionList);
+
+        mTimeLineAdapter.setItemClick(new ItemClickListener() {
+            @Override
+            public void onItemClick(View view, int positon) {
+                Log.i("linlian","positon="+positon);
+                BookBeanMini bm = mTimeLineAdapter.getmFeedlist().get(positon);
+                Log.i("linlian","bm="+bm);
+                Intent intent = new Intent(MainActivity.this,BookDetailActivity.class);
+                intent.putExtra("id",bm.getId());
+                startActivity(intent);
+            }
+        });
+
 
     }
 

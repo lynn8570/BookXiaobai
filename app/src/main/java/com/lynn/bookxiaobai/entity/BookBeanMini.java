@@ -33,6 +33,25 @@ public class BookBeanMini {
     private String noteTime;
 
 
+    @Override
+    public String toString() {
+        return "BookBeanMini{" +
+                "idbox=" + idbox +
+                ", id='" + id + '\'' +
+                ", titile='" + titile + '\'' +
+                ", author='" + author + '\'' +
+                ", isbn10='" + isbn10 + '\'' +
+                ", isbn13='" + isbn13 + '\'' +
+                ", author_intro='" + author_intro + '\'' +
+                ", summary='" + summary + '\'' +
+                ", price='" + price + '\'' +
+                ", state=" + state +
+                ", stateTime='" + stateTime + '\'' +
+                ", note='" + note + '\'' +
+                ", noteTime='" + noteTime + '\'' +
+                '}';
+    }
+
     public long getIdbox() {
         return idbox;
     }
@@ -149,4 +168,7 @@ public class BookBeanMini {
         setNoteTime(time);
 
     }}
+
+
+
 
