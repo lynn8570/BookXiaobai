@@ -23,7 +23,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class BookDetailActivity extends AppCompatActivity {
+public class BookDetailActivity extends ActivityBase {
     @BindView(R.id.txt_book_name)
     TextView txtBookName;
     @BindView(R.id.txt_author)
@@ -45,21 +45,14 @@ public class BookDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_detail);
-
         ButterKnife.bind(BookDetailActivity.this);
-
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        setupHomeAsUpToolBar();
         setTitle("图书详情");
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null)
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
 
         mBookBeanMiniBox = new BookBeanMiniBox(BookBeanMini.class);
 
         bookPresenter = new BookPresenter(BookDetailActivity.this);
         bookPresenter.onCreate();
-
         bookPresenter.attachView(new BookView<BookBean>() {
             @Override
             public void onSuccess(BookBean data) {
@@ -93,10 +86,6 @@ public class BookDetailActivity extends AppCompatActivity {
         } else {
             displayBookDetail(mBookbean);
         }
-
-
-
-
 
 
         imgStar.setOnClickListener(new View.OnClickListener() {
@@ -149,11 +138,11 @@ public class BookDetailActivity extends AppCompatActivity {
     }
 
     private void displayBookDetail(BookBean bookBean) {
-        mBookbean=bookBean;
+        mBookbean = bookBean;
         if (bookBean != null) {
             txtBookName.setText(bookBean.getTitle());
 
-            txtAuthor.setText(bookBean.getAuthor().size()==0?"null":bookBean.getAuthor().get(0));
+            txtAuthor.setText(bookBean.getAuthor().size() == 0 ? "null" : bookBean.getAuthor().get(0));
             textView.setText(bookBean.getSummary());
         }
         updateStar();

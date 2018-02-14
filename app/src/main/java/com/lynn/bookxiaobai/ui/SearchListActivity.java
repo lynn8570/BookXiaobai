@@ -21,7 +21,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class SearchListActivity extends Activity {
+public class SearchListActivity extends ActivityBase {
 
     private String mKey;
     private BooklistPresenter booklistPresenter = new BooklistPresenter(SearchListActivity.this);
@@ -38,6 +38,7 @@ public class SearchListActivity extends Activity {
         setContentView(R.layout.activity_search_list);
 
         ButterKnife.bind(SearchListActivity.this);
+        setupHomeAsUpToolBar();
 
 
         booklistPresenter.onCreate();
