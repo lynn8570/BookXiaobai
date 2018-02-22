@@ -36,7 +36,7 @@ public class BookBeanMiniBox  extends BaseBoxManager<BookBeanMini>{
 
 
     public void bindBoxListAdapter(final BoxListAdapter<BookBeanMini> adapter,DataSubscriptionList subscriptionList){
-        getQueryBuilder().order(BookBeanMini_.idbox).build()
+        getQueryBuilder().orderDesc(BookBeanMini_.idbox).build()
                 .subscribe(subscriptionList)
                 .on(AndroidScheduler.mainThread())
                 .observer(new DataObserver<List<BookBeanMini>>() {

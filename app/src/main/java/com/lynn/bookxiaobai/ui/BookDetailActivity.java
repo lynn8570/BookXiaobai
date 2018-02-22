@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.lynn.bookxiaobai.R;
 import com.lynn.bookxiaobai.boxstore.BookBeanMiniBox;
 import com.lynn.bookxiaobai.entity.BookBean;
@@ -50,6 +51,7 @@ public class BookDetailActivity extends ActivityBase {
         setTitle("图书详情");
 
         mBookBeanMiniBox = new BookBeanMiniBox(BookBeanMini.class);
+
 
         bookPresenter = new BookPresenter(BookDetailActivity.this);
         bookPresenter.onCreate();
@@ -120,6 +122,15 @@ public class BookDetailActivity extends ActivityBase {
         }
     }
 
+    private void downloadImage(){
+
+        String imgUrl=mBookbean.getImages().getSmall();
+        if(!TextUtils.isEmpty(imgUrl)){
+
+            Glide.with(this).load(imgUrl).into(imgBook);
+        }
+    }
+
     private void addBookBeanMini() {
         long result = mBookBeanMiniBox.insert(mBookbean);
         if (result < 0) {
@@ -146,5 +157,6 @@ public class BookDetailActivity extends ActivityBase {
             textView.setText(bookBean.getSummary());
         }
         updateStar();
+        downloadImage();
     }
 }
