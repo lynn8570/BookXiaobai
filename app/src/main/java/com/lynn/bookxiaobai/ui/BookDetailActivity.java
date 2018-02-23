@@ -1,12 +1,16 @@
 package com.lynn.bookxiaobai.ui;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.TestLooperManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -96,10 +100,97 @@ public class BookDetailActivity extends ActivityBase {
                 if (mBookBeanMini == null) {
                     addBookBeanMini();
                 } else {
-                    removeBookBeanMini();
+                    showDialog();
                 }
             }
         });
+
+    }
+
+    private void changeStatus(MenuItem menuItem) {
+        if (mBookBeanMini != null) {
+            if (mBookBeanMini.getState() == BookBeanMini.STATE_READED) {
+                mBookBeanMini.setState(BookBeanMini.STATE_UNREADED);
+            }else{
+                mBookBeanMini.setState(BookBeanMini.STATE_READED);
+            }
+            mBookBeanMiniBox.update(mBookBeanMini);
+
+        }
+        updateStatusMenuItem(menuItem);
+    }
+
+
+    @Override
+    protected void setupHomeAsUpToolBar() {
+        super.setupHomeAsUpToolBar();
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.action_status:
+
+                        changeStatus(item);
+                        break;
+
+                }
+                return true;
+            }
+        });
+    }
+
+    private void updateStatusMenuItem(MenuItem statusItem) {
+        if (statusItem == null) return;
+
+        if (mBookBeanMini == null) {
+            statusItem.setVisible(false);
+        } else {
+            statusItem.setVisible(true);
+            statusItem.setCheckable(true);
+            if (mBookBeanMini.getState() == BookBeanMini.STATE_READED) {
+                statusItem.setChecked(true);
+                statusItem.setTitle(R.string.read);
+            } else {
+                statusItem.setChecked(false);
+                statusItem.setTitle(R.string.unread);
+            }
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.detail_menu, menu);
+
+
+        updateStatusMenuItem(menu.getItem(0));
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    private void showDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("确认要移除收藏吗？");
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                removeBookBeanMini();
+            }
+        }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                dialogInterface.cancel();
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
 
     }
 
@@ -120,12 +211,15 @@ public class BookDetailActivity extends ActivityBase {
         } else {
             imgStar.setImageDrawable(ContextCompat.getDrawable(BookDetailActivity.this, R.drawable.ic_unstar));
         }
+
+        invalidateOptionsMenu();
     }
 
-    private void downloadImage(){
 
-        String imgUrl=mBookbean.getImages().getSmall();
-        if(!TextUtils.isEmpty(imgUrl)){
+    private void downloadImage() {
+
+        String imgUrl = mBookbean.getImages().getSmall();
+        if (!TextUtils.isEmpty(imgUrl)) {
 
             Glide.with(this).load(imgUrl).into(imgBook);
         }
