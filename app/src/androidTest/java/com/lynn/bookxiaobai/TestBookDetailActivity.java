@@ -37,7 +37,6 @@ public class TestBookDetailActivity {
 
         String r = TimeUtil.parseDateTimeSpan("2018-02-12 08:00", "2018-02-13 23:03");
         System.out.println(r);
-
         String r1 = TimeUtil.parseDateTimeSpan("2018-02-13 22:40", "2018-02-13 23:03");
         System.out.println(r1);
         String r2 = TimeUtil.parseDateTimeSpan("2018-02-13 20:40", "2018-02-13 23:03");
