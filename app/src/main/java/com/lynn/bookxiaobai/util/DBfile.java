@@ -83,9 +83,24 @@ public class DBfile {
     public static void unZipDBfile(String zipFile) {
 
         try {
-            ZipUtils.unzip(zipFile/*DB_PATH + "DB.zip"*/, DB_PATH + "testdir");
+
+            deleteExistDBfile();
+            ZipUtils.unzip(zipFile/*DB_PATH + "DB.zip"*/, DB_PATH );
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public static void deleteExistDBfile(){
+        ArrayList<File> files = DirTraversal.listFiles(DB_PATH);
+        if (files == null) return ;
+
+        for (int i = 0; i < files.size(); i++) {
+            File temp = files.get(i);
+            if(temp.exists()&&temp.isFile()){
+                temp.delete();
+            }
+            Log.i(TAG, "zipDBFile item i=" + i + " path =" + temp.getAbsolutePath());
         }
     }
 }

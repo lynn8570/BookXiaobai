@@ -2,8 +2,10 @@ package com.lynn.bookxiaobai.ui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -36,11 +38,14 @@ import butterknife.ButterKnife;
 import io.objectbox.reactive.DataSubscriptionList;
 
 public class MainActivity extends ActivityBase {
+    private static final String TAG = "MainActivity";
 
     private BookPresenter mBookPresenter = new BookPresenter(this);
     private RecyclerView mRecyclerView;
     private TimeLineAdapter mTimeLineAdapter;
     private List<BookBeanMini> mDataList = new ArrayList<BookBeanMini>();
+
+    private static final int REQUEST_CODE_ZIPFILE = 10;
 
 
     private BookBeanMiniBox mBeanMiniBox;
@@ -110,6 +115,7 @@ public class MainActivity extends ActivityBase {
                         break;
                     case R.id.action_import:
 
+                        getZipFilePath();
                         break;
 
                 }
@@ -117,6 +123,52 @@ public class MainActivity extends ActivityBase {
             }
         });
     }
+
+    public void getZipFilePath() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        //intent.setType(“image/*”);//选择图片
+        //intent.setType(“audio/*”); //选择音频
+        //intent.setType(“video/*”); //选择视频 （mp4 3gp 是android支持的视频格式）
+        //intent.setType(“video/*;image/*”);//同时选择视频和图片
+        intent.setType("*/*");//无类型限制
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        startActivityForResult(intent, REQUEST_CODE_ZIPFILE);
+    }
+
+    public class ImportDBTash extends AsyncTask<String, Boolean, Void> {
+
+
+
+        @Override
+        protected Void doInBackground(String... paths) {
+            String path = paths[0];
+            DBfile.unZipDBfile(path);
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            Toast.makeText(MainActivity.this,"导入数据库完成，重启应用中",Toast.LENGTH_LONG).show();
+
+
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    System.exit(0);
+                    Intent i =new Intent(getBaseContext(), MainActivity.class);
+                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(i);
+                }
+            },3000);
+
+
+        }
+    }
+
+    private Handler mHandler = new Handler();
+
 
     public class ExportDBTask extends AsyncTask<Void, Void, Boolean> {
 
@@ -166,10 +218,7 @@ public class MainActivity extends ActivityBase {
         mTimeLineAdapter.setItemClick(new ItemClickListener() {
             @Override
             public void onItemClick(View view, int positon) {
-                Log.i("linlian", "view=" + view);
-                Log.i("linlian", "positon=" + positon);
                 BookBeanMini bm = mTimeLineAdapter.getmFeedlist().get(positon);
-                Log.i("linlian", "bm=" + bm);
                 Intent intent = new Intent(MainActivity.this, BookDetailActivity.class);
                 intent.putExtra("id", bm.getId());
                 startActivity(intent);
@@ -177,11 +226,9 @@ public class MainActivity extends ActivityBase {
 
             @Override
             public void onStateClick(View view, int position) {
-                Log.i("linlian", "onStateClick positon=" + position);
                 BookBeanMini bm = mTimeLineAdapter.getmFeedlist().get(position);
                 bm.setState(bm.getState() == BookBeanMini.STATE_UNREADED ? BookBeanMini.STATE_READED : BookBeanMini.STATE_UNREADED);
                 bm.setStateTime(TimeUtil.getTime(null));
-                Log.i("linlian", "onStateClick bm=" + bm);
                 mBeanMiniBox.update(bm);
 
             }
@@ -190,41 +237,43 @@ public class MainActivity extends ActivityBase {
 
     }
 
-    private void loadData() {
-        mDataList.add(new BookBeanMini("南极", "[爱尔兰] 克莱尔·吉根 ", 0, "南极》是爱尔兰短篇小说女王克莱尔·吉根经典小说集，被评为《洛杉矶时报》年度小说，获爱尔兰隆尼文学奖。", "2017-02-12 08:00"));
-        mDataList.add(new BookBeanMini("深度工作", "〔美〕卡尔·纽波特 ", 2, "", "2018-01-12 08:00"));
-        mDataList.add(new BookBeanMini("原则", "爱尔兰] 克莱尔·吉根 ", 1, "华尔街投资大神、对冲基金公司桥水创始人，人生经验之作", "2018-02-12 08:00"));
-        mDataList.add(new BookBeanMini("精神科的故事：锅男", "[日] 奥田英朗 ", 0, "《精神科的故事：锅男》是奥田英朗又一部长篇小说代表作，也是《精神科的故事》系列完结篇。", "2017-02-12 08:00"));
-        mDataList.add(new BookBeanMini("南极", "[爱尔兰] 克莱尔·吉根 ", 0, "南极》是爱尔兰短篇小说女王克莱尔·吉根经典小说集，被评为《洛杉矶时报》年度小说，获爱尔兰隆尼文学奖。", "2017-02-12 08:00"));
-        mDataList.add(new BookBeanMini("深度工作", "〔美〕卡尔·纽波特 ", 2, "", "2018-01-12 08:00"));
-        mDataList.add(new BookBeanMini("原则", "爱尔兰] 克莱尔·吉根 ", 1, "华尔街投资大神、对冲基金公司桥水创始人，人生经验之作", "2018-02-12 08:00"));
-        mDataList.add(new BookBeanMini("精神科的故事：锅男dadaadada", "[日] 奥田英朗 ", 0, "《精神科的故事：锅男》是奥田英朗又一部长篇小说代表作，也是《精神科的故事》系列完结篇。", "2017-02-12 08:00"));
-        mDataList.add(new BookBeanMini("南极", "[爱尔兰] 克莱尔·吉根 ", 0, "南极》是爱尔兰短篇小说女王克莱尔·吉根经典小说集，被评为《洛杉矶时报》年度小说，获爱尔兰隆尼文学奖。", "2017-02-12 08:00"));
-        mDataList.add(new BookBeanMini("深度工作", "〔美〕卡尔·纽波特 ", 2, "", "2018-01-12 08:00"));
-        mDataList.add(new BookBeanMini("原则", "爱尔兰] 克莱尔·吉根 ", 1, "华尔街投资大神、对冲基金公司桥水创始人，人生经验之作", "2018-02-12 08:00"));
-        mDataList.add(new BookBeanMini("精神科的故事：锅男", "[日] 奥田英朗 ", 0, "《精神科的故事：锅男》是奥田英朗又一部长篇小说代表作，也是《精神科的故事》系列完结篇。", "2017-02-12 08:00"));
-        mDataList.add(new BookBeanMini("南极", "[爱尔兰] 克莱尔·吉根 ", 0, "南极》是爱尔兰短篇小说女王克莱尔·吉根经典小说集，被评为《洛杉矶时报》年度小说，获爱尔兰隆尼文学奖。", "2017-02-12 08:00"));
-        mDataList.add(new BookBeanMini("深度工作", "〔美〕卡尔·纽波特 ", 2, "", "2018-01-12 08:00"));
-        mDataList.add(new BookBeanMini("原则", "爱尔兰] 克莱尔·吉根 ", 1, "华尔街投资大神、对冲基金公司桥水创始人，人生经验之作", "2018-02-12 08:00"));
-        mDataList.add(new BookBeanMini("精神科的故事：锅男", "[日] 奥田英朗 ", 0, "《精神科的故事：锅男》是奥田英朗又一部长篇小说代表作，也是《精神科的故事》系列完结篇。", "2017-02-12 08:00"));
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if (result != null) {
-            if (result.getContents() == null) {
-                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
-                String strIsbn = result.getContents();
-                if (!TextUtils.isEmpty(strIsbn)) {
-                    mBookPresenter.getBookByIsbn(strIsbn);
+
+        if (requestCode == REQUEST_CODE_ZIPFILE && resultCode == Activity.RESULT_OK) {
+
+            Uri uri = data.getData();
+            if (uri != null && !TextUtils.isEmpty(uri.getPath())) {
+                String path = uri.getPath();
+                Log.i(TAG, "pick zip file path =" + path);
+                if (path.endsWith("zip")) {
+
+
+                    new ImportDBTash().execute(path);
+                    return;
+                }
+
+            }
+            Toast.makeText(MainActivity.this, "请选择包含数据库的zip文件", Toast.LENGTH_LONG).show();
+
+        } else {
+            IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+            if (result != null) {
+                if (result.getContents() == null) {
+                    Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                    String strIsbn = result.getContents();
+                    if (!TextUtils.isEmpty(strIsbn)) {
+                        mBookPresenter.getBookByIsbn(strIsbn);
+                    }
                 }
             }
-        } else {
-            super.onActivityResult(requestCode, resultCode, data);
         }
+
+        super.onActivityResult(requestCode, resultCode, data);
+
     }
 
     private BookView<BookBean> mBookView = new BookView<BookBean>() {
