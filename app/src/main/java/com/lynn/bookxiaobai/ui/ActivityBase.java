@@ -22,9 +22,13 @@ public class ActivityBase extends AppCompatActivity {
 
     }
 
-    protected void setupHomeAsUpToolBar(){
+    protected void setSupportActionBar(){
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+    }
+
+    protected void setupHomeAsUpToolBar(){
+       setSupportActionBar();
         if (getSupportActionBar() != null) {
 
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);

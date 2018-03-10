@@ -3,5 +3,8 @@
     <string name="unread">未读</string>
     <string name="unstart">未知</string>
     <string name="read">已读</string>
+    <string name="importdb">导出数据库</string>
+    <string name="exportdb">倒入数据库</string>
+
 
 </resources>

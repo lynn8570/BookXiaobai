@@ -5,6 +5,8 @@ package com.lynn.bookxiaobai.util;
  */
 
 
+import android.text.TextUtils;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -325,9 +327,10 @@ public class ZipUtils {
         }
     }
 
-    @SuppressWarnings("unchecked")
     public static void unzip(String zipFileName, String outputDirectory)
             throws IOException {
+        if (zipFileName == null || TextUtils.isEmpty(zipFileName))
+            return;
         ZipFile zipFile = null;
         try {
             zipFile = new ZipFile(zipFileName);

@@ -2,11 +2,15 @@ package com.lynn.bookxiaobai.ui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,6 +24,7 @@ import com.lynn.bookxiaobai.boxstore.BookBeanMiniBox;
 import com.lynn.bookxiaobai.entity.BookBean;
 import com.lynn.bookxiaobai.entity.BookBeanMini;
 import com.lynn.bookxiaobai.presenter.BookPresenter;
+import com.lynn.bookxiaobai.util.DBfile;
 import com.lynn.bookxiaobai.util.TimeUtil;
 import com.lynn.bookxiaobai.view.BookView;
 
@@ -30,7 +35,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.objectbox.reactive.DataSubscriptionList;
 
-public class MainActivity extends Activity {
+public class MainActivity extends ActivityBase {
 
     private BookPresenter mBookPresenter = new BookPresenter(this);
     private RecyclerView mRecyclerView;
@@ -54,6 +59,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        setUpToolBar();
         ButterKnife.bind(MainActivity.this);
 
         imageViewScan.setOnClickListener(new View.OnClickListener() {
@@ -89,6 +95,58 @@ public class MainActivity extends Activity {
         initTimeline();
     }
 
+
+    private void setUpToolBar() {
+        setSupportActionBar();
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.action_export:
+
+                        new ExportDBTask().execute();
+
+                        break;
+                    case R.id.action_import:
+
+                        break;
+
+                }
+                return true;
+            }
+        });
+    }
+
+    public class ExportDBTask extends AsyncTask<Void, Void, Boolean> {
+
+        @Override
+        protected void onPreExecute() {
+
+
+            super.onPreExecute();
+            Toast.makeText(MainActivity.this, "正在导出数据库", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            return DBfile.zipDBfile();
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            super.onPostExecute(result);
+            if (result) {
+                Toast.makeText(MainActivity.this,
+                        "已导出到文件：" + DBfile.ZIP_FILE_PATH + DBfile.ZIP_FILE_NAME, Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(MainActivity.this,
+                        "导出数据库失败", Toast.LENGTH_LONG).show();
+            }
+
+        }
+    }
+
     @Override
     protected void onDestroy() {
         dataSubscriptionList.cancel();
@@ -121,7 +179,7 @@ public class MainActivity extends Activity {
             public void onStateClick(View view, int position) {
                 Log.i("linlian", "onStateClick positon=" + position);
                 BookBeanMini bm = mTimeLineAdapter.getmFeedlist().get(position);
-                bm.setState(bm.getState() == BookBeanMini.STATE_UNREADED?BookBeanMini.STATE_READED:BookBeanMini.STATE_UNREADED);
+                bm.setState(bm.getState() == BookBeanMini.STATE_UNREADED ? BookBeanMini.STATE_READED : BookBeanMini.STATE_UNREADED);
                 bm.setStateTime(TimeUtil.getTime(null));
                 Log.i("linlian", "onStateClick bm=" + bm);
                 mBeanMiniBox.update(bm);
@@ -191,6 +249,13 @@ public class MainActivity extends Activity {
 
 
     };
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+
+        return super.onCreateOptionsMenu(menu);
+    }
 
 
 }

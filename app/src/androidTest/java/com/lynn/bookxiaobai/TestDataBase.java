@@ -33,6 +33,7 @@ public class TestDataBase {
 
     @Before
     public void insertdata() throws Exception {
+        miniBox=new BookBeanMiniBox(BookBeanMini.class);
         BookBeanMini result = miniBox.getQueryBuilder().equal(BookBeanMini_.titile, "小黑子").build().findFirst();
 
         if (result == null || TextUtils.isEmpty(result.getTitile())) {
@@ -70,9 +71,9 @@ public class TestDataBase {
 
     @Test
     public void testZipDB() throws Exception {
-        DBfile.zipDFfile();
+        DBfile.zipDBfile();
 
-        File file = new File("./data/data/com.lynn.bookxiaobai/files/objectbox/objectbox/DB.zip");
+        File file = new File(DBfile.ZIP_FILE_PATH+DBfile.ZIP_FILE_NAME);
 
         Assert.assertTrue(file.exists());
 
@@ -81,7 +82,7 @@ public class TestDataBase {
     @Test
     public void testunZipDB() throws Exception {
 
-        DBfile.unZipDBfile();
+        DBfile.unZipDBfile(DBfile.ZIP_FILE_PATH+DBfile.ZIP_FILE_NAME);
         ArrayList<File> files = DirTraversal.listFiles(DBfile.DB_PATH + "testdir");
         int size = files.size();
 
