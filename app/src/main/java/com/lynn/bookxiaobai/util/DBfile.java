@@ -34,17 +34,6 @@ public class DBfile {
     }
 
 
-    public static boolean createDBfile() {
-        File testDB = new File(DB_PATH + "test.mdb");
-        try {
-            if (testDB.createNewFile()) {
-                return true;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
 
     public static boolean zipDBfile() {
 

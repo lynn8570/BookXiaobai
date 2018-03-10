@@ -64,17 +64,11 @@ public class TestDataBase {
 
     }
 
-    @Test
-    public void testCreateDB() throws Exception {
-        Assert.assertTrue(DBfile.createDBfile());
-    }
 
     @Test
     public void testZipDB() throws Exception {
         DBfile.zipDBfile();
-
         File file = new File(DBfile.ZIP_FILE_PATH+DBfile.ZIP_FILE_NAME);
-
         Assert.assertTrue(file.exists());
 
     }
